@@ -1,30 +1,33 @@
 import React from "react";
 import { getEmployees } from "../api/employees";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { setEmployees } from "../features/employee/employeeSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Employees = () => {
-  const [employees, setEmployees] = useState(null);
+  const dispatch = useDispatch();
+  const currentEmployees = useSelector(
+    (state) => state.employee.currentEmployees
+  );
 
   useEffect(() => {
-    try {
-      async function fetchEmployees() {
+    async function fetchEmployees() {
+      try {
         const response = await getEmployees();
-        setEmployees(response.data.employees);
+        dispatch(setEmployees(response.data.employees));
+      } catch (err) {
+        console.error("Error fetching employees", err);
       }
-      fetchEmployees();
-    } catch (err) {
-      console.log(err);
     }
-  }, []);
-
-  console.log(employees);
+    fetchEmployees();
+  }, [dispatch]);
 
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>Employees</h1>
       <ul>
-        {employees ? (
-          employees.map((e) => (
+        {currentEmployees ? (
+          currentEmployees.map((e) => (
             <li key={e._id} style={{ textAlign: "center" }}>
               {e.name}
             </li>
