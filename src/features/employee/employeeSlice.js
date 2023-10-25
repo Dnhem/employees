@@ -31,5 +31,5 @@ const employeeSlice = createSlice({
   },
 });
 
-export const { setEmployees } = employeeSlice.actions;
+export const { setEmployees, setDeletedEmployees } = employeeSlice.actions;
 export default employeeSlice.reducer;
