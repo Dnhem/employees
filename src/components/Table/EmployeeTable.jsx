@@ -55,8 +55,15 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
                   <TableCell align="left">{row.phoneNumber}</TableCell>
                   {!row.isDeleted ? (
                     <TableCell align="left">
-                      <ModeEditIcon color="primary" />{" "}
-                      <DeleteForeverIcon color="error" sx={{ marginLeft: 2 }} />
+                      <ModeEditIcon
+                        color="primary"
+                        sx={{ cursor: "pointer" }}
+                      />{" "}
+                      <DeleteForeverIcon
+                        onClick={() => alert("Are you sure?")}
+                        color="error"
+                        sx={{ cursor: "pointer", marginLeft: 2 }}
+                      />
                     </TableCell>
                   ) : null}
                 </TableRow>
