@@ -4,8 +4,12 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { employeeSchema } from "../../schemas";
 import "./EmployeeForm.css";
-import { addEmployee } from "../../api/employees";
+import { addEmployee, editEmployee } from "../../api/employees";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewEmployee } from "../../features/employee/employeeSlice";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -19,19 +23,40 @@ const addressInputFields = [
   { id: "ZIPCode", type: "text", placeHolder: "Zip Code" },
 ];
 
-const EmployeeForm = () => {
+const EmployeeForm = ({ employeeId }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentEmployees = useSelector(
+    (state) => state.employee.currentEmployees
+  );
+  const savedEmployee = currentEmployees.find((e) => e._id === employeeId);
+
   const onSubmit = async (values, actions) => {
     const prefixedPhoneNumber = "+" + values.phoneNumber;
     const updatedValues = { ...values, phoneNumber: prefixedPhoneNumber };
     try {
       const response = await addEmployee(updatedValues);
-      console.log("Success:", response.data);
+      dispatch(addNewEmployee(response.data));
+      console.log("Successfully created employee:", response.data);
       actions.resetForm();
       navigate("/employees");
     } catch (err) {
-      console.error(err);
+      console.error("Error adding employee", err);
     }
+  };
+
+  let initialValues = {
+    name: "",
+    email: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    dateOfEmployment: "",
+    homeAddress: {
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      ZIPCode: "",
+    },
   };
 
   const {
@@ -44,26 +69,24 @@ const EmployeeForm = () => {
     setFieldValue,
     isSubmitting,
   } = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      phoneNumber: "",
-      dateOfBirth: "",
-      dateOfEmployment: "",
-      homeAddress: {
-        addressLine1: "",
-        addressLine2: "",
-        city: "",
-        ZIPCode: "",
-      },
-    },
+    initialValues: savedEmployee || initialValues,
     validationSchema: employeeSchema,
     onSubmit,
   });
 
+  const updateEmployee = async (employeeId, values) => {
+    try {
+      navigate("/employees");
+      const response = await editEmployee(employeeId, values);
+      console.log("Successfully updated employee:", response.data);
+    } catch (err) {
+      console.error("Error updating employee:", err);
+    }
+  };
+
   return (
     <Box>
-      <form onSubmit={handleSubmit} autoComplete="off">
+      <form autoComplete="off">
         <Box
           style={{
             boxShadow:
@@ -177,15 +200,37 @@ const EmployeeForm = () => {
                 <span className="date-error">{errors.dateOfEmployment}</span>
               )}
             </Box>
-            <Box sx={{ alignSelf: "flex-end" }}>
-              <Button
-                disabled={isSubmitting}
-                type="submit"
-                sx={{ width: "200px" }}
-                variant="contained"
-              >
-                Submit
-              </Button>
+            <Box>
+              {employeeId ? (
+                <div style={{ display: "flex", gap: 12 }}>
+                  <Button
+                    sx={{ width: "50px" }}
+                    variant="contained"
+                    color="error"
+                    onClick={() => navigate("/employees")}
+                  >
+                    <CancelIcon />
+                  </Button>
+                  <Button
+                    onClick={() => updateEmployee(employeeId, values)}
+                    type="submit"
+                    disabled={isSubmitting}
+                    variant="contained"
+                  >
+                    <CheckCircleIcon />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  type="submit"
+                  sx={{ width: "200px" }}
+                  variant="contained"
+                >
+                  Submit
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>

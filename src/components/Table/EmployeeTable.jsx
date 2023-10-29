@@ -5,13 +5,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TablePagination from "@mui/material/TablePagination";
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -19,10 +20,14 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
     setPage(newPage);
   };
 
+  const editEmployee = (id) => {
+    navigate(`/employees/id/${id}`);
+  };
+
   return (
     <Box>
       <TableContainer
-        sx={{ maxWidth: 1000, margin: "5% 0 0 20%" }}
+        sx={{ maxWidth: 1100, margin: "5% 0 0 20%" }}
         component={Paper}
       >
         <Table aria-label="simple table">
@@ -56,6 +61,7 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
                   {!row.isDeleted ? (
                     <TableCell align="left">
                       <ModeEditIcon
+                        onClick={() => editEmployee(row._id)}
                         color="primary"
                         sx={{ cursor: "pointer" }}
                       />{" "}
