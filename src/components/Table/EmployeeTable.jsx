@@ -10,8 +10,13 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import BasicModal from "../Modal/Modal";
+import { useState } from "react";
 
 export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -22,6 +27,18 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
 
   const editEmployee = (id) => {
     navigate(`/employees/id/${id}`);
+  };
+
+  const openModal = (employeeId, employeeName) => {
+    setSelectedEmployeeId(employeeId);
+    setSelectedEmployeeName(employeeName);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedEmployeeId(null);
+    setSelectedEmployeeName(null);
+    setModalOpen(false);
   };
 
   return (
@@ -66,7 +83,7 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
                         sx={{ cursor: "pointer" }}
                       />{" "}
                       <DeleteForeverIcon
-                        onClick={() => alert("Are you sure?")}
+                        onClick={() => openModal(row._id, row.name)}
                         color="error"
                         sx={{ cursor: "pointer", marginLeft: 2 }}
                       />
@@ -86,6 +103,12 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
           rowsPerPageOptions={[]}
         />
       </TableContainer>
+      <BasicModal
+        employeeName={selectedEmployeeName}
+        employeeId={selectedEmployeeId}
+        openModal={modalOpen}
+        handleCloseModal={closeModal}
+      />
     </Box>
   );
 }
