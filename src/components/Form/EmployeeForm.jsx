@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { useFormik } from "formik";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { employeeSchema } from "../../schemas";
 import "./EmployeeForm.css";
@@ -8,8 +7,7 @@ import { addEmployee, editEmployee } from "../../api/employees";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewEmployee } from "../../features/employee/employeeSlice";
-import CancelIcon from "@mui/icons-material/Cancel";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { renderButtons } from "../../utils/buttonRenderer";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -84,179 +82,161 @@ const EmployeeForm = ({ employeeId }) => {
     }
   };
 
+  const trackErrors = (obj) => {
+    return Object.keys(obj).length > 0;
+  };
+
   return (
-    <Box>
-      <form autoComplete="off">
+    <form autoComplete="off">
+      <Box
+        style={{
+          boxShadow:
+            "13px 16px 15px -3px rgba(0,0,0,0.1),0px 6px 15px 7px rgba(0,0,0,0.1)",
+          padding: "40px 80px",
+        }}
+        sx={{
+          display: "flex",
+          gap: 20,
+          borderRadius: 5,
+          marginTop: 5,
+        }}
+      >
         <Box
-          style={{
-            boxShadow:
-              "13px 16px 15px -3px rgba(0,0,0,0.1),0px 6px 15px 7px rgba(0,0,0,0.1)",
-            padding: "40px 80px",
-          }}
           sx={{
             display: "flex",
-            gap: 20,
-            borderRadius: 5,
-            marginTop: 5,
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
+          {personInputFields.map((field, index) => (
+            <TextField
+              sx={{ width: 300 }}
+              label={field.placeHolder}
+              variant="standard"
+              key={index}
+              id={field.id}
+              type={field.type}
+              value={values[field.id]}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={
+                errors[field.id] && touched[field.id] ? "input-error" : ""
+              }
+            />
+          ))}
+          {addressInputFields.map((field, index) => (
+            <TextField
+              sx={{ width: 300 }}
+              label={field.placeHolder}
+              variant="standard"
+              key={index}
+              id={field.id}
+              type={field.type}
+              value={values.homeAddress[field.id]}
+              onChange={(e) =>
+                setFieldValue(`homeAddress.${field.id}`, e.target.value)
+              }
+              onBlur={handleBlur}
+              className={
+                errors.homeAddress &&
+                errors.homeAddress[field.id] &&
+                touched[field.id]
+                  ? "input-error"
+                  : ""
+              }
+            />
+          ))}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 3,
+              gap: 6,
             }}
           >
-            {personInputFields.map((field, index) => (
-              <TextField
-                sx={{ width: 300 }}
-                label={field.placeHolder}
-                variant="standard"
-                key={index}
-                id={field.id}
-                type={field.type}
-                value={values[field.id]}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={
-                  errors[field.id] && touched[field.id] ? "input-error" : ""
-                }
-              />
-            ))}
-            {addressInputFields.map((field, index) => (
-              <TextField
-                sx={{ width: 300 }}
-                label={field.placeHolder}
-                variant="standard"
-                key={index}
-                id={field.id}
-                type={field.type}
-                value={values.homeAddress[field.id]}
-                onChange={(e) =>
-                  setFieldValue(`homeAddress.${field.id}`, e.target.value)
-                }
-                onBlur={handleBlur}
-                className={
-                  errors.homeAddress &&
-                  errors.homeAddress[field.id] &&
-                  touched[field.id]
-                    ? "input-error"
-                    : ""
-                }
-              />
-            ))}
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 6,
+            <label style={{ color: "#646669" }} htmlFor="dateOfBirth">
+              Date of Birth
+            </label>
+            <input
+              className={
+                errors.dateOfBirth && touched.dateOfBirth ? "input-error" : ""
+              }
+              style={{ padding: "10px", marginTop: "-20px" }}
+              type="date"
+              id="dateOfBirth"
+              value={values.dateOfBirth}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.dateOfBirth && touched.dateOfBirth && (
+              <span className="date-error">{errors.dateOfBirth}</span>
+            )}
+            <label style={{ color: "#646669" }} htmlFor="dateOfEmployment">
+              Date of Hire
+            </label>
+            <input
+              className={
+                errors.dateOfEmployment && touched.dateOfEmployment
+                  ? "input-error"
+                  : ""
+              }
+              style={{
+                padding: "10px",
+                marginTop: "-20px",
               }}
-            >
-              <label style={{ color: "#646669" }} htmlFor="dateOfBirth">
-                Date of Birth
-              </label>
-              <input
-                className={
-                  errors.dateOfBirth && touched.dateOfBirth ? "input-error" : ""
-                }
-                style={{ padding: "10px", marginTop: "-20px" }}
-                type="date"
-                id="dateOfBirth"
-                value={values.dateOfBirth}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.dateOfBirth && touched.dateOfBirth && (
-                <span className="date-error">{errors.dateOfBirth}</span>
-              )}
-              <label style={{ color: "#646669" }} htmlFor="dateOfEmployment">
-                Date of Hire
-              </label>
-              <input
-                className={
-                  errors.dateOfEmployment && touched.dateOfEmployment
-                    ? "input-error"
-                    : ""
-                }
-                style={{
-                  padding: "10px",
-                  marginTop: "-20px",
-                }}
-                type="date"
-                id="dateOfEmployment"
-                value={values.dateOfEmployment}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.dateOfEmployment && touched.dateOfEmployment && (
-                <span className="date-error">{errors.dateOfEmployment}</span>
-              )}
-            </Box>
-            <Box>
-              {employeeId ? (
-                <div style={{ display: "flex", gap: 12 }}>
-                  <Button
-                    sx={{ width: "50px" }}
-                    variant="contained"
-                    color="error"
-                    onClick={() => navigate("/employees")}
-                  >
-                    <CancelIcon />
-                  </Button>
-                  <Button
-                    onClick={() => updateEmployee(employeeId, values)}
-                    type="submit"
-                    disabled={isSubmitting}
-                    variant="contained"
-                  >
-                    <CheckCircleIcon />
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  type="submit"
-                  sx={{ width: "200px" }}
-                  variant="contained"
-                >
-                  Submit
-                </Button>
-              )}
-            </Box>
+              type="date"
+              id="dateOfEmployment"
+              value={values.dateOfEmployment}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.dateOfEmployment && touched.dateOfEmployment && (
+              <span className="date-error">{errors.dateOfEmployment}</span>
+            )}
+          </Box>
+          <Box>
+            {renderButtons(
+              employeeId,
+              values,
+              isSubmitting,
+              navigate,
+              handleSubmit,
+              updateEmployee
+            )}
           </Box>
         </Box>
-      </form>
-      <Box>
-        {personInputFields.map(
-          (field, index) =>
-            errors[field.id] &&
-            touched[field.id] && (
-              <span key={index} className="error">
-                *{errors[field.id]}
-              </span>
-            )
-        )}
-        {addressInputFields.map(
-          (field, index) =>
-            errors.homeAddress &&
-            errors.homeAddress[field.id] &&
-            touched[field.id] && (
-              <span key={index} className="error">
-                *{errors.homeAddress[field.id]}
-              </span>
-            )
-        )}
       </Box>
-    </Box>
+      {trackErrors(errors) && trackErrors(touched) && (
+        <Box>
+          {personInputFields.map(
+            (field, index) =>
+              errors[field.id] &&
+              touched[field.id] && (
+                <span key={index} className="error">
+                  *{errors[field.id]}
+                </span>
+              )
+          )}
+          {addressInputFields.map(
+            (field, index) =>
+              errors.homeAddress &&
+              errors.homeAddress[field.id] &&
+              touched[field.id] && (
+                <span key={index} className="error">
+                  *{errors.homeAddress[field.id]}
+                </span>
+              )
+          )}
+        </Box>
+      )}
+    </form>
   );
 };
 

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import BasicModal from "../Modal/Modal";
 import { useState } from "react";
 
-export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
+export default function EmployeeTable({ employeeData, isDeleted = false }) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -56,7 +56,7 @@ export default function EmployeeTable({ employeeData, isNotDeleted = true }) {
               <TableCell align="left">Email</TableCell>
               <TableCell align="left">Address</TableCell>
               <TableCell align="left">Phone</TableCell>
-              {isNotDeleted && <TableCell align="center">Actions</TableCell>}
+              {!isDeleted && <TableCell align="center">Actions</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>

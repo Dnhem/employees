@@ -32,7 +32,7 @@ const FormerEmployees = () => {
       {loading ? (
         <LoadingIndicator />
       ) : (
-        <EmployeeTable employeeData={deletedEmployees} isNotDeleted={false} />
+        <EmployeeTable employeeData={deletedEmployees} isDeleted={true} />
       )}
     </div>
   );
