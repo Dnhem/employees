@@ -3,7 +3,7 @@ import { getEmployees } from "../api/employees";
 import { useState, useEffect } from "react";
 
 const Employees = () => {
-  const [employees, setEmployees] = useState(null);
+  const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
     try {
