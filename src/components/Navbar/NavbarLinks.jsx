@@ -11,57 +11,28 @@ import PersonOffIcon from "@mui/icons-material/PersonOff";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
+const NavBarItems = [
+  { to: "/", icon: <HomeIcon />, text: "Home" },
+  { to: "/employees", icon: <PersonIcon />, text: "Employees" },
+  { to: "/addemployee", icon: <PersonAddAlt1Icon />, text: "Add Employee" },
+  { to: "/deleted", icon: <PersonOffIcon />, text: "Former Employees" },
+];
+
 const NavbarLinks = () => {
   return (
     <Box sx={{ overflow: "auto" }}>
-      <Link to="/" className="plain-link">
+      {NavBarItems.map((item, index) => (
         <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
+          <Link key={index} to={item.to} className="plain-link">
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         </List>
-      </Link>
-      <Link to="/employees" className="plain-link">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Employees" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Link>
-      <Link to="/addemployee" className="plain-link">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <PersonAddAlt1Icon />
-              </ListItemIcon>
-              <ListItemText primary="Add Employee" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Link>
-      <Link to="/deleted" className="plain-link">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <PersonOffIcon />
-              </ListItemIcon>
-              <ListItemText primary="Former Employees" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Link>
+      ))}
     </Box>
   );
 };
