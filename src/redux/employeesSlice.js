@@ -5,7 +5,7 @@ const initialState = {
   deletedEmployees: [],
 };
 
-const employeeSlice = createSlice({
+const employeesSlice = createSlice({
   name: "employees",
   initialState,
   reducers: {
@@ -31,5 +31,5 @@ const employeeSlice = createSlice({
   },
 });
 
-export const { setEmployees, setDeletedEmployees } = employeeSlice.actions;
-export default employeeSlice.reducer;
+export const { setEmployees } = employeesSlice.actions;
+export default employeesSlice.reducer;

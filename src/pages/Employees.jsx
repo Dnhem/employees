@@ -1,7 +1,7 @@
 import React from "react";
 import { getEmployees } from "../api/employees";
 import { useEffect, useState } from "react";
-import { setEmployees } from "../features/employee/employeeSlice";
+import { setEmployees } from "../redux/employeesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import EmployeeTable from "../components/Table/EmployeeTable";
 import LoadingIndicator from "../components/Loading/LoadingIndicator";
@@ -14,7 +14,7 @@ const Employees = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchEmployees() {
+    (async function () {
       try {
         const response = await getEmployees();
         dispatch(setEmployees(response.data.employees));
@@ -23,8 +23,7 @@ const Employees = () => {
       } finally {
         setLoading(false);
       }
-    }
-    fetchEmployees();
+    })();
   }, [dispatch]);
 
   return (
