@@ -2,8 +2,9 @@ import EmployeeTable from "../components/Table/EmployeeTable";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getDeletedEmployees } from "../api/employees";
-import { setDeletedEmployees } from "../features/employee/employeeSlice";
+import { setDeletedEmployees } from "../redux/employeesSlice";
 import LoadingIndicator from "../components/Loading/LoadingIndicator";
+import usePagination from "../hooks/usePagination";
 
 const FormerEmployees = () => {
   const dispatch = useDispatch();
@@ -11,12 +12,17 @@ const FormerEmployees = () => {
     (state) => state.employee.deletedEmployees
   );
   const [loading, setLoading] = useState(true);
+  const { page, rowsPerPage, handleChangePage } = usePagination();
 
   useEffect(() => {
     async function fetchDeletedEmployees() {
       try {
         const response = await getDeletedEmployees();
-        dispatch(setDeletedEmployees(response.data.employees));
+        const deletedEmployeesData = response.data.employees.slice(
+          page * rowsPerPage,
+          page * rowsPerPage + rowsPerPage
+        );
+        dispatch(setDeletedEmployees(deletedEmployeesData));
       } catch (err) {
         console.error("Error fetching employees", err);
       } finally {
@@ -32,7 +38,12 @@ const FormerEmployees = () => {
       {loading ? (
         <LoadingIndicator />
       ) : (
-        <EmployeeTable employeeData={deletedEmployees} isNotDeleted={false} />
+        <EmployeeTable
+          employeeData={deletedEmployees}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          handleChangePage={handleChangePage}
+        />
       )}
     </div>
   );

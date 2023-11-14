@@ -10,6 +10,7 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonOffIcon from "@mui/icons-material/PersonOff";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import { nanoid } from "nanoid";
 
 const NavBarItems = [
   { to: "/", icon: <HomeIcon />, text: "Home" },
@@ -21,8 +22,8 @@ const NavBarItems = [
 const NavbarLinks = () => {
   return (
     <Box sx={{ overflow: "auto" }}>
-      {NavBarItems.map((item, index) => (
-        <List key={index}>
+      {NavBarItems.map((item) => (
+        <List key={nanoid()}>
           <Link to={item.to} className="plain-link">
             <ListItem disablePadding>
               <ListItemButton>
