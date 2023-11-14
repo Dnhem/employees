@@ -17,21 +17,15 @@ const Employees = () => {
     }
   }, []);
 
-  console.log(employees);
-
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>Employees</h1>
       <ul>
-        {employees ? (
-          employees.map((e) => (
-            <li key={e._id} style={{ textAlign: "center" }}>
-              {e.name}
-            </li>
-          ))
-        ) : (
-          <h1 style={{ textAlign: "center" }}>Loading</h1>
-        )}
+        {employees.map((e) => (
+          <li key={e._id} style={{ textAlign: "center" }}>
+            {e.name}
+          </li>
+        ))}
       </ul>
     </div>
   );
