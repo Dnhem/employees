@@ -1,31 +1,42 @@
 import React from "react";
 import { getEmployees } from "../api/employees";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { setEmployees } from "../redux/employeesSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Employees = () => {
-  const [employees, setEmployees] = useState([]);
+  const dispatch = useDispatch();
+  const currentEmployees = useSelector(
+    (state) => state.employee.currentEmployees
+  );
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      async function fetchEmployees() {
+    (async function () {
+      try {
         const response = await getEmployees();
-        setEmployees(response.data.employees);
+        dispatch(setEmployees(response.data.employees));
+      } catch (err) {
+        console.error("Error fetching employees", err);
+      } finally {
+        setLoading(false);
       }
-      fetchEmployees();
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+    })();
+  }, [dispatch]);
 
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>Employees</h1>
       <ul>
-        {employees.map((e) => (
-          <li key={e._id} style={{ textAlign: "center" }}>
-            {e.name}
-          </li>
-        ))}
+        {loading ? (
+          <h1 style={{ textAlign: "center" }}>Loading</h1>
+        ) : (
+          currentEmployees.map((employee) => (
+            <li key={employee._id} style={{ textAlign: "center" }}>
+              {employee.name}
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
