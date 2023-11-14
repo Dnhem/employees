@@ -1,7 +1,7 @@
 import React from "react";
 import { getEmployees } from "../api/employees";
 import { useEffect } from "react";
-import { setEmployees } from "../features/employee/employeeSlice";
+import { setEmployees } from "../redux/employeesSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Employees = () => {
@@ -11,15 +11,14 @@ const Employees = () => {
   );
 
   useEffect(() => {
-    async function fetchEmployees() {
+    (async function () {
       try {
         const response = await getEmployees();
         dispatch(setEmployees(response.data.employees));
       } catch (err) {
         console.error("Error fetching employees", err);
       }
-    }
-    fetchEmployees();
+    })();
   }, [dispatch]);
 
   return (
@@ -27,9 +26,9 @@ const Employees = () => {
       <h1 style={{ textAlign: "center" }}>Employees</h1>
       <ul>
         {currentEmployees ? (
-          currentEmployees.map((e) => (
-            <li key={e._id} style={{ textAlign: "center" }}>
-              {e.name}
+          currentEmployees.map((employee) => (
+            <li key={employee._id} style={{ textAlign: "center" }}>
+              {employee.name}
             </li>
           ))
         ) : (
