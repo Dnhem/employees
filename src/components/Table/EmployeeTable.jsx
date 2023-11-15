@@ -16,6 +16,7 @@ export default function EmployeeTable({
   handleChangePage,
   page,
   rowsPerPage,
+  totalCount,
   showActions = false,
 }) {
   return (
@@ -62,7 +63,7 @@ export default function EmployeeTable({
         </Table>
         <TablePagination
           component="div"
-          count={employeeData.length}
+          count={totalCount}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}

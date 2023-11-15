@@ -6,7 +6,17 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
-export const getEmployees = () => instance.get("/employees");
+export const getEmployees = (page, limit) => {
+  const params = {
+    page,
+    limit,
+  };
+  return instance.get("/employees", { params });
+};
+
+export const getTotalEmployeeCount = () => {
+  return instance.get("/employees");
+};
 
 export const getDeletedEmployees = () => instance.get("/employees/deleted");
 
