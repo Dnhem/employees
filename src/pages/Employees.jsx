@@ -15,7 +15,8 @@ const Employees = () => {
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
-  const { page, offset, rowsPerPage, handleChangePage } = usePagination();
+  const { page, offset, rowsPerPage, handleChangePage, handleDecreasePage } =
+    usePagination();
 
   useEffect(() => {
     (async function () {
@@ -43,6 +44,7 @@ const Employees = () => {
         <EmployeeTable
           employeeData={currentEmployees}
           handleChangePage={handleChangePage}
+          handleDecreasePage={handleDecreasePage}
           page={page}
           rowsPerPage={rowsPerPage}
           totalCount={totalCount}

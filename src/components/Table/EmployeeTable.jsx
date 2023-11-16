@@ -14,6 +14,7 @@ import { Box } from "@mui/material";
 export default function EmployeeTable({
   employeeData,
   handleChangePage,
+  handleDecreasePage,
   page,
   rowsPerPage,
   totalCount,
@@ -69,6 +70,9 @@ export default function EmployeeTable({
           rowsPerPage={rowsPerPage}
           labelRowsPerPage=""
           rowsPerPageOptions={[]}
+          backIconButtonProps={{
+            onClick: handleDecreasePage,
+          }}
         />
       </TableContainer>
     </Box>

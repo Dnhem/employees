@@ -14,12 +14,19 @@ const usePagination = (
     setOffset((prevOffset) => (prevOffset += 1));
   };
 
+  const handleDecreasePage = () => {
+    const newPage = Math.max(0, page - 1);
+    setPage(newPage);
+    setOffset((prevOffset) => (prevOffset -= 1));
+  };
+
   return {
     page,
     offset,
     initialOffset,
     rowsPerPage,
     handleChangePage,
+    handleDecreasePage,
   };
 };
 
