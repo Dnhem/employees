@@ -21,9 +21,9 @@ const NavBarItems = [
 const NavbarLinks = () => {
   return (
     <Box sx={{ overflow: "auto" }}>
-      {NavBarItems.map((item, index) => (
-        <List>
-          <Link key={index} to={item.to} className="plain-link">
+      {NavBarItems.map((item) => (
+        <List key={item.to}>
+          <Link to={item.to} className="plain-link">
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
