@@ -13,11 +13,11 @@ import { Box } from "@mui/material";
 
 export default function EmployeeTable({
   employeeData,
+  totalEmployees,
   handleChangePage,
   handleDecreasePage,
   page,
   rowsPerPage,
-  totalCount,
   showActions = false,
 }) {
   return (
@@ -64,7 +64,7 @@ export default function EmployeeTable({
         </Table>
         <TablePagination
           component="div"
-          count={totalCount}
+          count={totalEmployees}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}

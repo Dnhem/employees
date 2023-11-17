@@ -1,5 +1,5 @@
 import React from "react";
-import { getEmployees, getTotalEmployeeCount } from "../api/employees";
+import { getEmployees } from "../api/employees";
 import { useEffect, useState } from "react";
 import { setEmployees } from "../redux/employeesSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,18 +13,15 @@ const Employees = () => {
     (state) => state.employee.currentEmployees
   );
   const [loading, setLoading] = useState(true);
-  const [totalCount, setTotalCount] = useState(0);
-
-  const { page, offset, rowsPerPage, handleChangePage, handleDecreasePage } =
+  const [employeeCount, setEmployeeCount] = useState(0);
+  const { page, rowsPerPage, handleChangePage, handleDecreasePage } =
     usePagination();
 
   useEffect(() => {
     (async function () {
       try {
-        const employeeCount = await getTotalEmployeeCount();
-        const totalEmployeeCount = employeeCount.data.employees.length;
-        setTotalCount(totalEmployeeCount);
-        const response = await getEmployees(offset, rowsPerPage);
+        const response = await getEmployees(page + 1, rowsPerPage);
+        setEmployeeCount(response.data.count);
         const employeesData = response.data.employees;
         dispatch(setEmployees(employeesData));
       } catch (err) {
@@ -33,7 +30,7 @@ const Employees = () => {
         setLoading(false);
       }
     })();
-  }, [dispatch, offset, page, rowsPerPage]);
+  }, [dispatch, page, rowsPerPage]);
 
   return (
     <div>
@@ -47,8 +44,8 @@ const Employees = () => {
           handleDecreasePage={handleDecreasePage}
           page={page}
           rowsPerPage={rowsPerPage}
-          totalCount={totalCount}
           showActions={true}
+          totalEmployees={employeeCount}
         />
       )}
     </div>

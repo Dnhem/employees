@@ -14,10 +14,6 @@ export const getEmployees = (page, limit) => {
   return instance.get("/employees", { params });
 };
 
-export const getTotalEmployeeCount = () => {
-  return instance.get("/employees");
-};
-
 export const getDeletedEmployees = () => instance.get("/employees/deleted");
 
 export const addEmployee = (employeeInfo) =>
