@@ -24,3 +24,8 @@ export const employeeSchema = yup.object().shape({
   dateOfBirth: yup.string().required("Date of birth required"),
   dateOfEmployment: yup.string().required("Date of hire required"),
 });
+
+// export const combinedValidationSchema = yup.object().shape({
+//   ...employeeSchema.fields,
+//   ...addressSchema.fields,
+// });

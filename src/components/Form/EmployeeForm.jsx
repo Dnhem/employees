@@ -84,12 +84,12 @@ const EmployeeForm = () => {
               gap: 3,
             }}
           >
-            {personInputFields.map((field, index) => (
+            {personInputFields.map((field) => (
               <TextField
                 sx={{ width: 300 }}
                 label={field.placeHolder}
                 variant="standard"
-                key={index}
+                key={field.id}
                 id={field.id}
                 type={field.type}
                 value={values[field.id]}
@@ -100,12 +100,12 @@ const EmployeeForm = () => {
                 }
               />
             ))}
-            {addressInputFields.map((field, index) => (
+            {addressInputFields.map((field) => (
               <TextField
                 sx={{ width: 300 }}
                 label={field.placeHolder}
                 variant="standard"
-                key={index}
+                key={field.id}
                 id={field.id}
                 type={field.type}
                 value={values.homeAddress[field.id]}
@@ -116,7 +116,8 @@ const EmployeeForm = () => {
                 className={
                   errors.homeAddress &&
                   errors.homeAddress[field.id] &&
-                  touched[field.id]
+                  touched.homeAddress &&
+                  touched.homeAddress[field.id]
                     ? "input-error"
                     : ""
                 }
@@ -192,20 +193,21 @@ const EmployeeForm = () => {
       </form>
       <Box>
         {personInputFields.map(
-          (field, index) =>
+          (field) =>
             errors[field.id] &&
             touched[field.id] && (
-              <span key={index} className="error">
+              <span key={field.placeHolder} className="error">
                 *{errors[field.id]}
               </span>
             )
         )}
         {addressInputFields.map(
-          (field, index) =>
+          (field) =>
             errors.homeAddress &&
             errors.homeAddress[field.id] &&
-            touched[field.id] && (
-              <span key={index} className="error">
+            touched.homeAddress &&
+            touched.homeAddress[field.id] && (
+              <span key={field.placeHolder} className="error">
                 *{errors.homeAddress[field.id]}
               </span>
             )
