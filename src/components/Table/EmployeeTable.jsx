@@ -9,6 +9,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function EmployeeTable({
   employeeData,
@@ -19,6 +20,11 @@ export default function EmployeeTable({
   rowsPerPage,
   showActions = false,
 }) {
+  const navigate = useNavigate();
+  const editEmployee = (id) => {
+    navigate(`/employees/id/${id}`);
+  };
+
   return (
     <Box>
       <TableContainer
@@ -53,8 +59,16 @@ export default function EmployeeTable({
                 <TableCell align="left">{row.phoneNumber}</TableCell>
                 {showActions ? (
                   <TableCell align="left">
-                    <ModeEditIcon color="primary" />{" "}
-                    <DeleteForeverIcon color="error" sx={{ marginLeft: 2 }} />
+                    <ModeEditIcon
+                      onClick={() => editEmployee(row._id)}
+                      color="primary"
+                      sx={{ cursor: "pointer" }}
+                    />{" "}
+                    <DeleteForeverIcon
+                      onClick={() => alert("Are you sure?")}
+                      color="error"
+                      sx={{ cursor: "pointer", marginLeft: 2 }}
+                    />
                   </TableCell>
                 ) : null}
               </TableRow>

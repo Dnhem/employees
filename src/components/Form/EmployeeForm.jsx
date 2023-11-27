@@ -5,8 +5,11 @@ import TextField from "@mui/material/TextField";
 import { employeeSchema } from "../../schemas";
 import "./EmployeeForm.css";
 import { addEmployee, editEmployee } from "../../api/employees";
+import { addNewEmployee } from "../../redux/employeesSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -33,7 +36,8 @@ const EmployeeForm = ({ employeeId }) => {
     const updatedValues = { ...values, phoneNumber: prefixedPhoneNumber };
     try {
       const response = await addEmployee(updatedValues);
-      console.log("Success:", response.data);
+      dispatch(addNewEmployee(response.data));
+      console.log("Successfully created employee:", response.data);
       navigate("/employees");
     } catch (err) {
       console.error("Error adding employee", err);
@@ -69,6 +73,15 @@ const EmployeeForm = ({ employeeId }) => {
     onSubmit,
   });
 
+  const updateEmployee = async (employeeId, values) => {
+    try {
+      navigate("/employees");
+      const response = await editEmployee(employeeId, values);
+      console.log("Successfully updated employee:", response.data);
+    } catch (err) {
+      console.error("Error updating employee:", err);
+    }
+  };
   const trackErrors = (obj) => {
     return Object.keys(obj).length > 0;
   };
@@ -192,14 +205,35 @@ const EmployeeForm = ({ employeeId }) => {
             )}
           </Box>
           <Box sx={{ alignSelf: "flex-end" }}>
-            <Button
-              disabled={isSubmitting}
-              type="submit"
-              sx={{ width: "200px" }}
-              variant="contained"
-            >
-              Submit
-            </Button>
+            {employeeId ? (
+              <div style={{ display: "flex", gap: 12 }}>
+                <Button
+                  sx={{ width: "50px" }}
+                  variant="contained"
+                  color="error"
+                  onClick={() => navigate("/employees")}
+                >
+                  <CancelIcon />
+                </Button>
+                <Button
+                  onClick={() => updateEmployee(employeeId, values)}
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="contained"
+                >
+                  <CheckCircleIcon />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                disabled={isSubmitting}
+                type="submit"
+                sx={{ width: "200px" }}
+                variant="contained"
+              >
+                Submit
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

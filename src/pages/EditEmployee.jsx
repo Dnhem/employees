@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 
 const EditEmployee = () => {
   const [employee, setEmployee] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
@@ -17,6 +18,8 @@ const EditEmployee = () => {
         setEmployee(response.data);
       } catch (err) {
         console.error("Error fetching employee", err);
+      } finally {
+        setLoading(false);
       }
     }
     fetchEmployee();
@@ -31,8 +34,7 @@ const EditEmployee = () => {
       }}
     >
       <h1 style={{ textAlign: "center", fontWeight: 100 }}>Edit Employee</h1>
-      {!employee && <LoadingIndicator />}
-      <EmployeeForm employeeId={id} />
+      {loading ? <LoadingIndicator /> : <EmployeeForm employeeId={id} />}
     </Box>
   );
 };
