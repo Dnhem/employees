@@ -14,7 +14,7 @@ import "./Navbar.css";
 const NavBarItems = [
   { to: "/", icon: <HomeIcon />, text: "Home" },
   { to: "/employees", icon: <PersonIcon />, text: "Employees" },
-  { to: "/addemployee", icon: <PersonAddAlt1Icon />, text: "Add Employee" },
+  { to: "/employees/new", icon: <PersonAddAlt1Icon />, text: "Add Employee" },
   { to: "/deleted", icon: <PersonOffIcon />, text: "Former Employees" },
 ];
 

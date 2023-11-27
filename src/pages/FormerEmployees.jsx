@@ -12,16 +12,16 @@ const FormerEmployees = () => {
     (state) => state.employee.deletedEmployees
   );
   const [loading, setLoading] = useState(true);
-  const { page, rowsPerPage, handleChangePage } = usePagination();
+  const [deletedEmployeeCount, setDeletedEmployeeCount] = useState(0);
+  const { page, rowsPerPage, handleChangePage, handleDecreasePage } =
+    usePagination();
 
   useEffect(() => {
     async function fetchDeletedEmployees() {
       try {
-        const response = await getDeletedEmployees();
-        const deletedEmployeesData = response.data.employees.slice(
-          page * rowsPerPage,
-          page * rowsPerPage + rowsPerPage
-        );
+        const response = await getDeletedEmployees(page + 1, rowsPerPage);
+        setDeletedEmployeeCount(response.data.count);
+        const deletedEmployeesData = response.data.employees;
         dispatch(setDeletedEmployees(deletedEmployeesData));
       } catch (err) {
         console.error("Error fetching employees", err);
@@ -30,7 +30,7 @@ const FormerEmployees = () => {
       }
     }
     fetchDeletedEmployees();
-  }, [dispatch]);
+  }, [dispatch, page, rowsPerPage]);
 
   return (
     <div>
@@ -43,6 +43,8 @@ const FormerEmployees = () => {
           rowsPerPage={rowsPerPage}
           page={page}
           handleChangePage={handleChangePage}
+          handleDecreasePage={handleDecreasePage}
+          totalCount={deletedEmployeeCount}
         />
       )}
     </div>

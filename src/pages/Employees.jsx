@@ -45,7 +45,7 @@ const Employees = () => {
           page={page}
           rowsPerPage={rowsPerPage}
           showActions={true}
-          totalEmployees={employeeCount}
+          totalCount={employeeCount}
         />
       )}
     </div>

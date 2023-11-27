@@ -14,7 +14,13 @@ export const getEmployees = (page, limit) => {
   return instance.get("/employees", { params });
 };
 
-export const getDeletedEmployees = () => instance.get("/employees/deleted");
+export const getDeletedEmployees = (page, limit) => {
+  const params = {
+    page,
+    limit,
+  };
+  return instance.get("/employees/deleted", { params });
+};
 
 export const addEmployee = (employeeInfo) =>
   instance.post("/employees", employeeInfo);
