@@ -209,7 +209,7 @@ const EmployeeForm = () => {
             <Box sx={{ marginTop: -0.6 }} key={field.placeHolder}>
               {touched[field.id] && (
                 <span key={`error-${field.id}`} className="error">
-                  {errors.homeAddress ? `*${errors.homeAddress[field.id]}` : ""}
+                  {errors.homeAddress && errors.homeAddress[field.id]}
                 </span>
               )}
               {touched.homeAddress && errors.homeAddress && (
