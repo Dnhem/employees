@@ -27,7 +27,6 @@ const EmployeeForm = () => {
     try {
       const response = await addEmployee(updatedValues);
       console.log("Success:", response.data);
-      actions.resetForm();
       navigate("/employees");
     } catch (err) {
       console.error(err);
@@ -210,12 +209,12 @@ const EmployeeForm = () => {
             <Box sx={{ marginTop: -0.6 }} key={field.placeHolder}>
               {touched[field.id] && (
                 <span key={`error-${field.id}`} className="error">
-                  *{errors.homeAddress[field.id]}
+                  {errors.homeAddress ? `*${errors.homeAddress[field.id]}` : ""}
                 </span>
               )}
               {touched.homeAddress && errors.homeAddress && (
                 <span key={`error-homeAddress-${field.id}`} className="error">
-                  *{errors.homeAddress[field.id]}
+                  {errors.homeAddress[field.id]}
                 </span>
               )}
             </Box>
