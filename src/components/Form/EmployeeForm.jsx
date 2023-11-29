@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -75,12 +76,12 @@ const EmployeeForm = ({ employeeId }) => {
 
   const updateEmployee = async (employeeId, values) => {
     try {
-      navigate("/employees");
       const response = await editEmployee(employeeId, values);
       console.log("Successfully updated employee:", response.data);
     } catch (err) {
       console.error("Error updating employee:", err);
     }
+    navigate("/employees");
   };
   const trackErrors = (obj) => {
     return Object.keys(obj).length > 0;
@@ -221,17 +222,18 @@ const EmployeeForm = ({ employeeId }) => {
                   disabled={isSubmitting}
                   variant="contained"
                 >
-                  <CheckCircleIcon />
+                  {isSubmitting ? <CachedIcon /> : <CheckCircleIcon />}
                 </Button>
               </div>
             ) : (
               <Button
+                onClick={handleSubmit}
                 disabled={isSubmitting}
                 type="submit"
                 sx={{ width: "200px" }}
                 variant="contained"
               >
-                Submit
+                {isSubmitting ? <CachedIcon /> : "Submit"}
               </Button>
             )}
           </Box>

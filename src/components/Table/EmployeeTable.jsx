@@ -20,9 +20,9 @@ export default function EmployeeTable({
   rowsPerPage,
   showActions = false,
 }) {
-  const navigate = useNavigate();
+  const redirectToEmployee = useNavigate();
   const editEmployee = (id) => {
-    navigate(`/employees/id/${id}`);
+    redirectToEmployee(`/employees/id/${id}`);
   };
 
   return (
