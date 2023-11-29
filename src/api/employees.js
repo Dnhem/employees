@@ -25,7 +25,8 @@ export const getDeletedEmployees = (page, limit) => {
 export const addEmployee = (employeeInfo) =>
   instance.post("/employees", employeeInfo);
 
-export const editEmployee = (id) => instance.patch(`/employees/${id}`);
+export const editEmployee = (id, employeeInfo) =>
+  instance.patch(`/employees/${id}`, employeeInfo);
 
 export const deleteEmployee = (id) =>
   instance.delete(`/employees/soft-delete/${id}`);

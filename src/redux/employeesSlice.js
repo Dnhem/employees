@@ -15,7 +15,7 @@ const employeesSlice = createSlice({
     setDeletedEmployees: (state, action) => {
       state.deletedEmployees = action.payload;
     },
-    addEmployee: (state, action) => {
+    addNewEmployee: (state, action) => {
       state.currentEmployees.push(action.payload);
     },
     deleteEmployee: (state, action) => {
@@ -31,5 +31,6 @@ const employeesSlice = createSlice({
   },
 });
 
-export const { setEmployees, setDeletedEmployees } = employeesSlice.actions;
+export const { setEmployees, setDeletedEmployees, addNewEmployee } =
+  employeesSlice.actions;
 export default employeesSlice.reducer;

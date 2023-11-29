@@ -4,8 +4,13 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { employeeSchema } from "../../schemas";
 import "./EmployeeForm.css";
-import { addEmployee } from "../../api/employees";
+import { addEmployee, editEmployee } from "../../api/employees";
+import { addNewEmployee } from "../../redux/employeesSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -19,18 +24,39 @@ const addressInputFields = [
   { id: "ZIPCode", type: "text", placeHolder: "Zip Code" },
 ];
 
-const EmployeeForm = () => {
+const EmployeeForm = ({ employeeId }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentEmployees = useSelector(
+    (state) => state.employee.currentEmployees
+  );
+  const savedEmployee = currentEmployees.find((e) => e._id === employeeId);
+
   const onSubmit = async (values, actions) => {
     const prefixedPhoneNumber = "+" + values.phoneNumber;
     const updatedValues = { ...values, phoneNumber: prefixedPhoneNumber };
     try {
       const response = await addEmployee(updatedValues);
-      console.log("Success:", response.data);
+      dispatch(addNewEmployee(response.data));
+      console.log("Successfully created employee:", response.data);
       navigate("/employees");
     } catch (err) {
-      console.error(err);
+      console.error("Error adding employee", err);
     }
+  };
+
+  let initialValues = {
+    name: "",
+    email: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    dateOfEmployment: "",
+    homeAddress: {
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      ZIPCode: "",
+    },
   };
 
   const {
@@ -43,22 +69,20 @@ const EmployeeForm = () => {
     setFieldValue,
     isSubmitting,
   } = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      phoneNumber: "",
-      dateOfBirth: "",
-      dateOfEmployment: "",
-      homeAddress: {
-        addressLine1: "",
-        addressLine2: "",
-        city: "",
-        ZIPCode: "",
-      },
-    },
+    initialValues: savedEmployee || initialValues,
     validationSchema: employeeSchema,
     onSubmit,
   });
+
+  const updateEmployee = async (employeeId, values) => {
+    try {
+      const response = await editEmployee(employeeId, values);
+      console.log("Successfully updated employee:", response.data);
+      navigate("/employees");
+    } catch (err) {
+      console.error("Error updating employee:", err);
+    }
+  };
 
   const trackErrors = (obj) => {
     return Object.keys(obj).length > 0;
@@ -183,14 +207,36 @@ const EmployeeForm = () => {
             )}
           </Box>
           <Box sx={{ alignSelf: "flex-end" }}>
-            <Button
-              disabled={isSubmitting}
-              type="submit"
-              sx={{ width: "200px" }}
-              variant="contained"
-            >
-              Submit
-            </Button>
+            {employeeId ? (
+              <div style={{ display: "flex", gap: 12 }}>
+                <Button
+                  sx={{ width: "50px" }}
+                  variant="contained"
+                  color="error"
+                  onClick={() => navigate("/employees")}
+                >
+                  <CancelIcon />
+                </Button>
+                <Button
+                  onClick={() => updateEmployee(employeeId, values)}
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="contained"
+                >
+                  {isSubmitting ? <CachedIcon /> : <CheckCircleIcon />}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                type="submit"
+                sx={{ width: "200px" }}
+                variant="contained"
+              >
+                {isSubmitting ? <CachedIcon /> : "Submit"}
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>
@@ -201,7 +247,7 @@ const EmployeeForm = () => {
               errors[field.id] &&
               touched[field.id] && (
                 <span key={field.placeHolder} className="error">
-                  *{errors[field.id]}
+                  {errors[field.id]}
                 </span>
               )
           )}
