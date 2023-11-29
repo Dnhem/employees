@@ -4,9 +4,9 @@ import TextField from "@mui/material/TextField";
 import { employeeSchema } from "../../schemas";
 import "./EmployeeForm.css";
 import { addEmployee, editEmployee } from "../../api/employees";
+import { addNewEmployee } from "../../redux/employeesSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewEmployee } from "../../features/employee/employeeSlice";
 import { renderButtons } from "../../utils/buttonRenderer";
 
 const personInputFields = [
@@ -36,7 +36,6 @@ const EmployeeForm = ({ employeeId }) => {
       const response = await addEmployee(updatedValues);
       dispatch(addNewEmployee(response.data));
       console.log("Successfully created employee:", response.data);
-      actions.resetForm();
       navigate("/employees");
     } catch (err) {
       console.error("Error adding employee", err);
@@ -74,9 +73,9 @@ const EmployeeForm = ({ employeeId }) => {
 
   const updateEmployee = async (employeeId, values) => {
     try {
-      navigate("/employees");
       const response = await editEmployee(employeeId, values);
       console.log("Successfully updated employee:", response.data);
+      navigate("/employees");
     } catch (err) {
       console.error("Error updating employee:", err);
     }
@@ -87,7 +86,7 @@ const EmployeeForm = ({ employeeId }) => {
   };
 
   return (
-    <form autoComplete="off">
+    <form onSubmit={handleSubmit} autoComplete="off">
       <Box
         style={{
           boxShadow:
@@ -108,12 +107,12 @@ const EmployeeForm = ({ employeeId }) => {
             gap: 3,
           }}
         >
-          {personInputFields.map((field, index) => (
+          {personInputFields.map((field) => (
             <TextField
               sx={{ width: 300 }}
               label={field.placeHolder}
               variant="standard"
-              key={index}
+              key={field.id}
               id={field.id}
               type={field.type}
               value={values[field.id]}
@@ -124,12 +123,12 @@ const EmployeeForm = ({ employeeId }) => {
               }
             />
           ))}
-          {addressInputFields.map((field, index) => (
+          {addressInputFields.map((field) => (
             <TextField
               sx={{ width: 300 }}
               label={field.placeHolder}
               variant="standard"
-              key={index}
+              key={field.id}
               id={field.id}
               type={field.type}
               value={values.homeAddress[field.id]}
@@ -138,9 +137,12 @@ const EmployeeForm = ({ employeeId }) => {
               }
               onBlur={handleBlur}
               className={
-                errors.homeAddress &&
-                errors.homeAddress[field.id] &&
-                touched[field.id]
+                (touched[field.id] &&
+                  errors.homeAddress &&
+                  errors.homeAddress[field.id]) ||
+                (touched.homeAddress &&
+                  errors.homeAddress &&
+                  errors.homeAddress[field.id])
                   ? "input-error"
                   : ""
               }
@@ -201,7 +203,7 @@ const EmployeeForm = ({ employeeId }) => {
               <span className="date-error">{errors.dateOfEmployment}</span>
             )}
           </Box>
-          <Box>
+          <Box sx={{ alignSelf: "flex-end" }}>
             {renderButtons(
               employeeId,
               values,
@@ -214,26 +216,30 @@ const EmployeeForm = ({ employeeId }) => {
         </Box>
       </Box>
       {trackErrors(errors) && trackErrors(touched) && (
-        <Box>
+        <Box sx={{ display: "flex" }}>
           {personInputFields.map(
-            (field, index) =>
+            (field) =>
               errors[field.id] &&
               touched[field.id] && (
-                <span key={index} className="error">
-                  *{errors[field.id]}
+                <span key={field.placeHolder} className="error">
+                  {errors[field.id]}
                 </span>
               )
           )}
-          {addressInputFields.map(
-            (field, index) =>
-              errors.homeAddress &&
-              errors.homeAddress[field.id] &&
-              touched[field.id] && (
-                <span key={index} className="error">
-                  *{errors.homeAddress[field.id]}
+          {addressInputFields.map((field) => (
+            <Box sx={{ marginTop: -0.6 }} key={field.placeHolder}>
+              {touched[field.id] && (
+                <span key={`error-${field.id}`} className="error">
+                  {errors.homeAddress && errors.homeAddress[field.id]}
                 </span>
-              )
-          )}
+              )}
+              {touched.homeAddress && errors.homeAddress && (
+                <span key={`error-homeAddress-${field.id}`} className="error">
+                  {errors.homeAddress[field.id]}
+                </span>
+              )}
+            </Box>
+          ))}
         </Box>
       )}
     </form>

@@ -13,20 +13,22 @@ import { useNavigate } from "react-router-dom";
 import BasicModal from "../Modal/Modal";
 import { useState } from "react";
 
-export default function EmployeeTable({ employeeData, isDeleted = false }) {
+export default function EmployeeTable({
+  employeeData,
+  totalCount,
+  handleChangePage,
+  handleDecreasePage,
+  page,
+  rowsPerPage,
+  showActions = false,
+}) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const redirectToEmployee = useNavigate();
 
   const editEmployee = (id) => {
-    navigate(`/employees/id/${id}`);
+    redirectToEmployee(`/employees/id/${id}`);
   };
 
   const openModal = (employeeId, employeeName) => {
@@ -56,51 +58,52 @@ export default function EmployeeTable({ employeeData, isDeleted = false }) {
               <TableCell align="left">Email</TableCell>
               <TableCell align="left">Address</TableCell>
               <TableCell align="left">Phone</TableCell>
-              {!isDeleted && <TableCell align="center">Actions</TableCell>}
+              {showActions && <TableCell align="center">Actions</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
-            {employeeData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow
-                  key={row._id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
+            {employeeData.map((row) => (
+              <TableRow
+                key={row._id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="left">{row.dateOfBirth}</TableCell>
+                <TableCell align="left">{row.dateOfEmployment}</TableCell>
+                <TableCell align="left">{row.email}</TableCell>
+                <TableCell align="left">{`${row.homeAddress.addressLine1}, ${row.homeAddress.city} ${row.homeAddress.ZIPCode}`}</TableCell>
+                <TableCell align="left">{row.phoneNumber}</TableCell>
+                {showActions ? (
+                  <TableCell align="left">
+                    <ModeEditIcon
+                      onClick={() => editEmployee(row._id)}
+                      color="primary"
+                      sx={{ cursor: "pointer" }}
+                    />{" "}
+                    <DeleteForeverIcon
+                      onClick={() => openModal(row._id, row.name)}
+                      color="error"
+                      sx={{ cursor: "pointer", marginLeft: 2 }}
+                    />
                   </TableCell>
-                  <TableCell align="left">{row.dateOfBirth}</TableCell>
-                  <TableCell align="left">{row.dateOfEmployment}</TableCell>
-                  <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="left">{`${row.homeAddress.addressLine1}, ${row.homeAddress.city} ${row.homeAddress.ZIPCode}`}</TableCell>
-                  <TableCell align="left">{row.phoneNumber}</TableCell>
-                  {!row.isDeleted ? (
-                    <TableCell align="left">
-                      <ModeEditIcon
-                        onClick={() => editEmployee(row._id)}
-                        color="primary"
-                        sx={{ cursor: "pointer" }}
-                      />{" "}
-                      <DeleteForeverIcon
-                        onClick={() => openModal(row._id, row.name)}
-                        color="error"
-                        sx={{ cursor: "pointer", marginLeft: 2 }}
-                      />
-                    </TableCell>
-                  ) : null}
-                </TableRow>
-              ))}
+                ) : null}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
         <TablePagination
           component="div"
-          count={employeeData.length}
+          count={totalCount}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage=""
           rowsPerPageOptions={[]}
+          backIconButtonProps={{
+            onClick: handleDecreasePage,
+          }}
         />
       </TableContainer>
       <BasicModal

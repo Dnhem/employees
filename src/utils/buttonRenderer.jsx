@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CachedIcon from "@mui/icons-material/Cached";
 
 export const renderButtons = (
   employeeId,
@@ -27,7 +28,7 @@ export const renderButtons = (
           disabled={isSubmitting}
           variant="contained"
         >
-          <CheckCircleIcon />
+          {isSubmitting ? <CachedIcon /> : <CheckCircleIcon />}
         </Button>
       </div>
     );
@@ -40,7 +41,7 @@ export const renderButtons = (
         sx={{ width: "200px" }}
         variant="contained"
       >
-        Submit
+        {isSubmitting ? <CachedIcon /> : "Submit"}
       </Button>
     );
   }

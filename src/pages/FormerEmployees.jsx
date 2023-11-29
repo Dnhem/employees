@@ -2,8 +2,9 @@ import EmployeeTable from "../components/Table/EmployeeTable";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getDeletedEmployees } from "../api/employees";
-import { setDeletedEmployees } from "../features/employee/employeeSlice";
+import { setDeletedEmployees } from "../redux/employeesSlice";
 import LoadingIndicator from "../components/Loading/LoadingIndicator";
+import usePagination from "../hooks/usePagination";
 
 const FormerEmployees = () => {
   const dispatch = useDispatch();
@@ -11,12 +12,17 @@ const FormerEmployees = () => {
     (state) => state.employee.deletedEmployees
   );
   const [loading, setLoading] = useState(true);
+  const [deletedEmployeeCount, setDeletedEmployeeCount] = useState(0);
+  const { page, rowsPerPage, handleChangePage, handleDecreasePage } =
+    usePagination();
 
   useEffect(() => {
     async function fetchDeletedEmployees() {
       try {
-        const response = await getDeletedEmployees();
-        dispatch(setDeletedEmployees(response.data.employees));
+        const response = await getDeletedEmployees(page + 1, rowsPerPage);
+        setDeletedEmployeeCount(response.data.count);
+        const deletedEmployeesData = response.data.employees;
+        dispatch(setDeletedEmployees(deletedEmployeesData));
       } catch (err) {
         console.error("Error fetching employees", err);
       } finally {
@@ -24,7 +30,7 @@ const FormerEmployees = () => {
       }
     }
     fetchDeletedEmployees();
-  }, [dispatch]);
+  }, [dispatch, page, rowsPerPage]);
 
   return (
     <div>
@@ -32,7 +38,14 @@ const FormerEmployees = () => {
       {loading ? (
         <LoadingIndicator />
       ) : (
-        <EmployeeTable employeeData={deletedEmployees} isDeleted={true} />
+        <EmployeeTable
+          employeeData={deletedEmployees}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          handleChangePage={handleChangePage}
+          handleDecreasePage={handleDecreasePage}
+          totalCount={deletedEmployeeCount}
+        />
       )}
     </div>
   );
