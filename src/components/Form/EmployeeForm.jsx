@@ -78,11 +78,12 @@ const EmployeeForm = ({ employeeId }) => {
     try {
       const response = await editEmployee(employeeId, values);
       console.log("Successfully updated employee:", response.data);
+      navigate("/employees");
     } catch (err) {
       console.error("Error updating employee:", err);
     }
-    navigate("/employees");
   };
+
   const trackErrors = (obj) => {
     return Object.keys(obj).length > 0;
   };
