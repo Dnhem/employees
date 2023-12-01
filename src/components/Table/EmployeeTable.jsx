@@ -1,4 +1,3 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,7 +9,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import BasicModal from "../Modal/Modal";
+import AlertDialogue from "../Modal/AlertDialog";
 import { useState } from "react";
 
 export default function EmployeeTable({
@@ -38,8 +37,6 @@ export default function EmployeeTable({
   };
 
   const closeModal = () => {
-    setSelectedEmployeeId(null);
-    setSelectedEmployeeName(null);
     setModalOpen(false);
   };
 
@@ -106,11 +103,11 @@ export default function EmployeeTable({
           }}
         />
       </TableContainer>
-      <BasicModal
+      <AlertDialogue
+        openModal={modalOpen}
+        closeModal={closeModal}
         employeeName={selectedEmployeeName}
         employeeId={selectedEmployeeId}
-        openModal={modalOpen}
-        handleCloseModal={closeModal}
       />
     </Box>
   );
