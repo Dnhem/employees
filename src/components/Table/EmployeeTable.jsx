@@ -23,7 +23,6 @@ export default function EmployeeTable({
 }) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
   const redirectToEmployee = useNavigate();
 
   const editEmployee = (id) => {
@@ -33,11 +32,10 @@ export default function EmployeeTable({
   const openModal = (employeeId, employeeName) => {
     setSelectedEmployeeId(employeeId);
     setSelectedEmployeeName(employeeName);
-    setModalOpen(true);
   };
 
   const closeModal = () => {
-    setModalOpen(false);
+    setSelectedEmployeeId(null);
   };
 
   return (
@@ -104,7 +102,7 @@ export default function EmployeeTable({
         />
       </TableContainer>
       <AlertDialogue
-        openModal={modalOpen}
+        openModal={selectedEmployeeId}
         closeModal={closeModal}
         employeeName={selectedEmployeeName}
         employeeId={selectedEmployeeId}
