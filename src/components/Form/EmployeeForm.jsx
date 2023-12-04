@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { useFormik } from "formik";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { employeeSchema } from "../../schemas";
 import "./EmployeeForm.css";
@@ -8,9 +7,7 @@ import { addEmployee, editEmployee } from "../../api/employees";
 import { addNewEmployee } from "../../redux/employeesSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import CancelIcon from "@mui/icons-material/Cancel";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CachedIcon from "@mui/icons-material/Cached";
+import { renderButtons } from "../../utils/buttonRenderer";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -207,35 +204,13 @@ const EmployeeForm = ({ employeeId }) => {
             )}
           </Box>
           <Box sx={{ alignSelf: "flex-end" }}>
-            {employeeId ? (
-              <div style={{ display: "flex", gap: 12 }}>
-                <Button
-                  sx={{ width: "50px" }}
-                  variant="contained"
-                  color="error"
-                  onClick={() => navigate("/employees")}
-                >
-                  <CancelIcon />
-                </Button>
-                <Button
-                  onClick={() => updateEmployee(employeeId, values)}
-                  type="submit"
-                  disabled={isSubmitting}
-                  variant="contained"
-                >
-                  {isSubmitting ? <CachedIcon /> : <CheckCircleIcon />}
-                </Button>
-              </div>
-            ) : (
-              <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                type="submit"
-                sx={{ width: "200px" }}
-                variant="contained"
-              >
-                {isSubmitting ? <CachedIcon /> : "Submit"}
-              </Button>
+            {renderButtons(
+              employeeId,
+              values,
+              isSubmitting,
+              navigate,
+              handleSubmit,
+              updateEmployee
             )}
           </Box>
         </Box>

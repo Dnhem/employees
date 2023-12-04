@@ -1,4 +1,3 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,6 +9,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import AlertDialogue from "../Modal/AlertDialog";
+import { useState } from "react";
 
 export default function EmployeeTable({
   employeeData,
@@ -20,9 +21,21 @@ export default function EmployeeTable({
   rowsPerPage,
   showActions = false,
 }) {
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
   const redirectToEmployee = useNavigate();
+
   const editEmployee = (id) => {
     redirectToEmployee(`/employees/id/${id}`);
+  };
+
+  const openModal = (employeeId, employeeName) => {
+    setSelectedEmployeeId(employeeId);
+    setSelectedEmployeeName(employeeName);
+  };
+
+  const closeModal = () => {
+    setSelectedEmployeeId(null);
   };
 
   return (
@@ -65,7 +78,7 @@ export default function EmployeeTable({
                       sx={{ cursor: "pointer" }}
                     />{" "}
                     <DeleteForeverIcon
-                      onClick={() => alert("Are you sure?")}
+                      onClick={() => openModal(row._id, row.name)}
                       color="error"
                       sx={{ cursor: "pointer", marginLeft: 2 }}
                     />
@@ -88,6 +101,12 @@ export default function EmployeeTable({
           }}
         />
       </TableContainer>
+      <AlertDialogue
+        openModal={selectedEmployeeId}
+        closeModal={closeModal}
+        employeeName={selectedEmployeeName}
+        employeeId={selectedEmployeeId}
+      />
     </Box>
   );
 }
