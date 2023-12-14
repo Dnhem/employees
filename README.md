@@ -41,6 +41,7 @@ An employee management system to track employee records. Create/Update/Delete em
   <summary>Client</summary>
   <ul>
     <li><a href="https://reactjs.org/">React.js</a></li>
+    <li><a href="https://www.typescriptlang.org/">TypeScript</a></li>
     <li><a href="https://redux-toolkit.js.org">Redux Toolkit</a></li>
     <li><a href="https://reactrouter.com/en/main">React Router</a></li>
     <li><a href="https://mui.com/material-ui/getting-started/">MUI</a></li>
