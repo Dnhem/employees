@@ -1,17 +1,17 @@
-import React from "react";
 import { getEmployees } from "../api/employees";
 import { useEffect, useState } from "react";
 import { setEmployees } from "../redux/employeesSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import EmployeeTable from "../components/Table/EmployeeTable";
 import LoadingIndicator from "../components/Loading/LoadingIndicator";
 import usePagination from "../hooks/usePagination";
 
 const Employees = () => {
-  const dispatch = useDispatch();
-  const currentEmployees = useSelector(
+  const dispatch = useAppDispatch();
+  const currentEmployees = useAppSelector(
     (state) => state.employee.currentEmployees
   );
+
   const [loading, setLoading] = useState(true);
   const [employeeCount, setEmployeeCount] = useState(0);
   const { page, rowsPerPage, handleChangePage, handleDecreasePage } =

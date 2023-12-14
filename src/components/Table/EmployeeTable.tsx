@@ -10,9 +10,23 @@ import TablePagination from "@mui/material/TablePagination";
 import { Box, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AlertDialogue from "../Modal/AlertDialog";
-import { useState } from "react";
+import React, { useState } from "react";
+import { EmployeeSchemaModel } from "../../models/employeeSchema.model";
 
-export default function EmployeeTable({
+interface EmployeeTableProps {
+  employeeData: EmployeeSchemaModel[];
+  totalCount: number;
+  handleChangePage: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => void;
+  handleDecreasePage: () => void;
+  page: number;
+  rowsPerPage: number;
+  showActions?: boolean;
+}
+
+const EmployeeTable: React.FC<EmployeeTableProps> = ({
   employeeData,
   totalCount,
   handleChangePage,
@@ -20,16 +34,20 @@ export default function EmployeeTable({
   page,
   rowsPerPage,
   showActions = false,
-}) {
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
-  const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
+}) => {
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
+    null
+  );
+  const [selectedEmployeeName, setSelectedEmployeeName] = useState<
+    string | null
+  >(null);
   const redirectToEmployee = useNavigate();
 
-  const editEmployee = (id) => {
+  const editEmployee = (id: string) => {
     redirectToEmployee(`/employees/id/${id}`);
   };
 
-  const openModal = (employeeId, employeeName) => {
+  const openModal = (employeeId: string, employeeName: string) => {
     setSelectedEmployeeId(employeeId);
     setSelectedEmployeeName(employeeName);
   };
@@ -109,4 +127,6 @@ export default function EmployeeTable({
       />
     </Box>
   );
-}
+};
+
+export default EmployeeTable;

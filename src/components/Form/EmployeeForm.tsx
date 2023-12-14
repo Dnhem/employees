@@ -6,8 +6,11 @@ import "./EmployeeForm.css";
 import { addEmployee, editEmployee } from "../../api/employees";
 import { addNewEmployee } from "../../redux/employeesSlice";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { renderButtons } from "../../utils/buttonRenderer";
+import { EmployeeSchemaModel } from "../../models/employeeSchema.model";
+import { EmployeeInfo } from "../../models/employeeInfo.model";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { showAlertAndReset } from "../../utils/showAlertAndReset";
 
 const personInputFields = [
   { id: "name", type: "text", placeHolder: "Name" },
@@ -21,20 +24,28 @@ const addressInputFields = [
   { id: "ZIPCode", type: "text", placeHolder: "Zip Code" },
 ];
 
-const EmployeeForm = ({ employeeId }) => {
-  const dispatch = useDispatch();
+interface EmployeeFormProps {
+  employeeId?: string;
+}
+
+const EmployeeForm: React.FC<EmployeeFormProps> = ({ employeeId }) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const currentEmployees = useSelector(
+  const currentEmployees = useAppSelector(
     (state) => state.employee.currentEmployees
   );
-  const savedEmployee = currentEmployees.find((e) => e._id === employeeId);
+  const savedEmployee = currentEmployees.find(
+    (e: EmployeeSchemaModel) => e._id === employeeId
+  );
 
-  const onSubmit = async (values, actions) => {
+  const onSubmit = async (values: EmployeeInfo) => {
     const prefixedPhoneNumber = "+" + values.phoneNumber;
     const updatedValues = { ...values, phoneNumber: prefixedPhoneNumber };
+
     try {
       const response = await addEmployee(updatedValues);
       dispatch(addNewEmployee(response.data));
+      showAlertAndReset(dispatch, "Employee Successfully Created", "success");
       console.log("Successfully created employee:", response.data);
       navigate("/employees");
     } catch (err) {
@@ -65,23 +76,24 @@ const EmployeeForm = ({ employeeId }) => {
     touched,
     setFieldValue,
     isSubmitting,
-  } = useFormik({
+  } = useFormik<EmployeeInfo>({
     initialValues: savedEmployee || initialValues,
     validationSchema: employeeSchema,
     onSubmit,
   });
 
-  const updateEmployee = async (employeeId, values) => {
+  const updateEmployee = async (employeeId: string, values: EmployeeInfo) => {
     try {
       const response = await editEmployee(employeeId, values);
       console.log("Successfully updated employee:", response.data);
+      showAlertAndReset(dispatch, "Employee Successfully Updated", "info");
       navigate("/employees");
     } catch (err) {
       console.error("Error updating employee:", err);
     }
   };
 
-  const trackErrors = (obj) => {
+  const trackErrors = (obj: object) => {
     return Object.keys(obj).length > 0;
   };
 

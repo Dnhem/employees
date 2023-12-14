@@ -1,5 +1,5 @@
 import EmployeeTable from "../components/Table/EmployeeTable";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { useEffect, useState } from "react";
 import { getDeletedEmployees } from "../api/employees";
 import { setDeletedEmployees } from "../redux/employeesSlice";
@@ -7,8 +7,8 @@ import LoadingIndicator from "../components/Loading/LoadingIndicator";
 import usePagination from "../hooks/usePagination";
 
 const FormerEmployees = () => {
-  const dispatch = useDispatch();
-  const deletedEmployees = useSelector(
+  const dispatch = useAppDispatch();
+  const deletedEmployees = useAppSelector(
     (state) => state.employee.deletedEmployees
   );
   const [loading, setLoading] = useState(true);
