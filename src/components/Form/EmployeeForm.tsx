@@ -35,7 +35,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employeeId }) => {
     (state) => state.employee.currentEmployees
   );
   const savedEmployee = currentEmployees.find(
-    (e: EmployeeSchemaModel) => e._id === employeeId
+    (employee: EmployeeSchemaModel) => employee._id === employeeId
   );
 
   const onSubmit = async (values: EmployeeInfo) => {
@@ -77,7 +77,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employeeId }) => {
     setFieldValue,
     isSubmitting,
   } = useFormik<EmployeeInfo>({
-    initialValues: savedEmployee || initialValues,
+    initialValues: savedEmployee ?? initialValues,
     validationSchema: employeeSchema,
     onSubmit,
   });

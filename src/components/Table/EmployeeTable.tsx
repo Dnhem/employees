@@ -35,12 +35,15 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
   rowsPerPage,
   showActions = false,
 }) => {
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
+  interface EmployeeDataType {
+    employeeId: string;
+    employeeName: string;
+  }
+
+  const [employeeInfo, setEmployeeInfo] = useState<EmployeeDataType | null>(
     null
   );
-  const [selectedEmployeeName, setSelectedEmployeeName] = useState<
-    string | null
-  >(null);
+
   const redirectToEmployee = useNavigate();
 
   const editEmployee = (id: string) => {
@@ -48,12 +51,14 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
   };
 
   const openModal = (employeeId: string, employeeName: string) => {
-    setSelectedEmployeeId(employeeId);
-    setSelectedEmployeeName(employeeName);
+    setEmployeeInfo({
+      employeeId,
+      employeeName,
+    });
   };
 
   const closeModal = () => {
-    setSelectedEmployeeId(null);
+    setEmployeeInfo(null);
   };
 
   return (
@@ -119,12 +124,14 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
           }}
         />
       </TableContainer>
-      <AlertDialogue
-        openModal={selectedEmployeeId}
-        closeModal={closeModal}
-        employeeName={selectedEmployeeName}
-        employeeId={selectedEmployeeId}
-      />
+      {employeeInfo !== null && (
+        <AlertDialogue
+          openModal={employeeInfo.employeeId}
+          closeModal={closeModal}
+          employeeName={employeeInfo.employeeName}
+          employeeId={employeeInfo.employeeId}
+        />
+      )}
     </Box>
   );
 };

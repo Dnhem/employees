@@ -1,12 +1,22 @@
 import { setAlert } from "../redux/alertsSlice";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { EmployeesContainer } from "../redux/employeesSlice";
+
+export type AlertsStatus = "error" | "info" | "success" | "";
 
 interface AlertsType {
   alertMsg: string;
-  alertType: "error" | "info" | "success" | "";
+  alertType: AlertsStatus;
+}
+
+interface RootState {
+  employee: EmployeesContainer;
+  alerts: AlertsType;
 }
 
 export const showAlertAndReset = (
-  dispatch: any,
+  dispatch: ThunkDispatch<RootState, void, AnyAction>,
   message: string,
   type: AlertsType["alertType"]
 ) => {

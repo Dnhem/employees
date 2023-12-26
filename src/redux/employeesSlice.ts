@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { EmployeeSchemaModel } from "../models/employeeSchema.model";
 
-interface EmployeesContainer {
+export interface EmployeesContainer {
   currentEmployees: EmployeeSchemaModel[];
   deletedEmployees: EmployeeSchemaModel[];
 }

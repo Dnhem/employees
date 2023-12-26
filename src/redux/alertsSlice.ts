@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { produce } from "immer";
+import { AlertsStatus } from "../utils/showAlertAndReset";
 
 interface AlertsType {
   alertMsg: string;
-  alertType: "error" | "info" | "success" | "";
+  alertType: AlertsStatus;
 }
 
 const initialState: AlertsType = {

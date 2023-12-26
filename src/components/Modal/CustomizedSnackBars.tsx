@@ -2,6 +2,7 @@ import * as React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import { AlertsStatus } from "../../utils/showAlertAndReset";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -11,7 +12,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 interface CustomizedSnackBarsProps {
-  alertType: "error" | "info" | "success" | "";
+  alertType: AlertsStatus;
   alertMessage: string;
 }
 

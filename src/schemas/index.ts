@@ -18,7 +18,7 @@ export const employeeSchema = yup.object().shape({
       "is-at-least-ten-digits",
       "Enter a valid phone number (include country code)",
       (value) => {
-        const cleanedValue = value ? value.replace(/\D/g, "") : "";
+        const cleanedValue = value?.trim() ?? "";
         return cleanedValue.length > 10;
       }
     )
