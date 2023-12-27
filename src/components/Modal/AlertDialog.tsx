@@ -17,7 +17,7 @@ interface AlertDialogProps {
   openModal: string | null;
   closeModal: () => void;
   employeeName: string | null;
-  employeeId: string | number | null;
+  employeeId: string | null;
 }
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
@@ -30,7 +30,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
 
   const redirectToFormerEmployees = useNavigate();
 
-  const softDeleteEmployee = async (id: number) => {
+  const softDeleteEmployee = async (id: string) => {
     try {
       const response = await deleteEmployee(id);
       console.log("Employee successfully deleted:", response.data);
@@ -85,7 +85,9 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
           </Button>
           <Button
             variant="contained"
-            onClick={() => softDeleteEmployee(employeeId as number)}
+            onClick={() =>
+              employeeId !== null && softDeleteEmployee(employeeId)
+            }
             autoFocus
           >
             <CheckCircleIcon />

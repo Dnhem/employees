@@ -29,5 +29,5 @@ export const addEmployee = (employeeInfo: EmployeeInfo) =>
 export const editEmployee = (id: string, employeeInfo: EmployeeInfo) =>
   instance.patch(`/employees/${id}`, employeeInfo);
 
-export const deleteEmployee = (id: number) =>
+export const deleteEmployee = (id: string) =>
   instance.delete(`/employees/soft-delete/${id}`);
