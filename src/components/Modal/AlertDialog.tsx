@@ -14,14 +14,12 @@ import { useAppDispatch } from "../../redux/hooks";
 import { showAlertAndReset } from "../../utils/showAlertAndReset";
 
 interface AlertDialogProps {
-  openModal: string | null;
   closeModal: () => void;
   employeeName: string | null;
   employeeId: string | null;
 }
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
-  openModal,
   closeModal,
   employeeName,
   employeeId,
@@ -44,7 +42,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   return (
     <Box>
       <Dialog
-        open={!!openModal}
+        open={true}
         onClose={closeModal}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -85,9 +83,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
           </Button>
           <Button
             variant="contained"
-            onClick={() =>
-              employeeId !== null && softDeleteEmployee(employeeId)
-            }
+            onClick={() => employeeId && softDeleteEmployee(employeeId)}
             autoFocus
           >
             <CheckCircleIcon />

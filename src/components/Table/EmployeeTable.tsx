@@ -124,9 +124,8 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
           }}
         />
       </TableContainer>
-      {employeeInfo !== null && (
+      {employeeInfo && (
         <AlertDialogue
-          openModal={employeeInfo.employeeId}
           closeModal={closeModal}
           employeeName={employeeInfo.employeeName}
           employeeId={employeeInfo.employeeId}
