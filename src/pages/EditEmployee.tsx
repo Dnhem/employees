@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getEmployees } from "../api/employees";
@@ -7,15 +6,14 @@ import EmployeeForm from "../components/Form/EmployeeForm";
 import { Box } from "@mui/material";
 
 const EditEmployee = () => {
-  const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const employeeId = id ? parseInt(id, 10) : 0;
 
   useEffect(() => {
     async function fetchEmployee() {
       try {
-        const response = await getEmployees(id);
-        setEmployee(response.data);
+        await getEmployees(employeeId);
       } catch (err) {
         console.error("Error fetching employee", err);
       } finally {

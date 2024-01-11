@@ -1,10 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const usePagination = (startingPage = 0, initialRowsPerPage = 5) => {
   const [page, setPage] = useState(startingPage);
-  const [rowsPerPage, setRowsPerPage] = useState(initialRowsPerPage);
+  const [rowsPerPage, _setRowsPerPage] = useState(initialRowsPerPage);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (
+    _: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
     setPage(newPage);
   };
 

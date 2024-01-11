@@ -7,10 +7,14 @@ import AddEmployee from "./pages/AddEmployee";
 import FormerEmployees from "./pages/FormerEmployees";
 import EditEmployee from "./pages/EditEmployee";
 import NotFound from "./pages/NotFound";
+import CustomizedSnackbars from "./components/Modal/CustomizedSnackBars";
+import { useAppSelector } from "./redux/hooks";
 
 function App() {
+  const { alertMsg, alertType } = useAppSelector((state) => state.alerts);
+
   return (
-    <>
+    <div>
       <CssBaseline />
       <Navbar />
       <Routes>
@@ -21,7 +25,10 @@ function App() {
         <Route path="/deleted" element={<FormerEmployees />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+      {alertMsg && (
+        <CustomizedSnackbars alertType={alertType} alertMessage={alertMsg} />
+      )}
+    </div>
   );
 }
 

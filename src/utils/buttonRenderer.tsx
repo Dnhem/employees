@@ -2,14 +2,16 @@ import Button from "@mui/material/Button";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CachedIcon from "@mui/icons-material/Cached";
+import { EmployeeInfo } from "../models/employeeInfo.model";
+import { NavigateFunction } from "react-router-dom";
 
 export const renderButtons = (
-  employeeId,
-  values,
-  isSubmitting,
-  navigate,
-  handleSubmit,
-  updateEmployee
+  employeeId: string | undefined,
+  values: EmployeeInfo,
+  isSubmitting: boolean,
+  navigate: NavigateFunction,
+  handleSubmit: () => void,
+  updateEmployee: (employeeId: string, values: EmployeeInfo) => Promise<void>
 ) => {
   if (employeeId) {
     return (

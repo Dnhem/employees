@@ -10,9 +10,23 @@ import TablePagination from "@mui/material/TablePagination";
 import { Box, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AlertDialogue from "../Modal/AlertDialog";
-import { useState } from "react";
+import React, { useState } from "react";
+import { EmployeeSchemaModel } from "../../models/employeeSchema.model";
 
-export default function EmployeeTable({
+interface EmployeeTableProps {
+  employeeData: EmployeeSchemaModel[];
+  totalCount: number;
+  handleChangePage: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => void;
+  handleDecreasePage: () => void;
+  page: number;
+  rowsPerPage: number;
+  showActions?: boolean;
+}
+
+const EmployeeTable: React.FC<EmployeeTableProps> = ({
   employeeData,
   totalCount,
   handleChangePage,
@@ -20,22 +34,31 @@ export default function EmployeeTable({
   page,
   rowsPerPage,
   showActions = false,
-}) {
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
-  const [selectedEmployeeName, setSelectedEmployeeName] = useState(null);
+}) => {
+  interface EmployeeDataType {
+    employeeId: string;
+    employeeName: string;
+  }
+
+  const [employeeInfo, setEmployeeInfo] = useState<EmployeeDataType | null>(
+    null
+  );
+
   const redirectToEmployee = useNavigate();
 
-  const editEmployee = (id) => {
+  const editEmployee = (id: string) => {
     redirectToEmployee(`/employees/id/${id}`);
   };
 
-  const openModal = (employeeId, employeeName) => {
-    setSelectedEmployeeId(employeeId);
-    setSelectedEmployeeName(employeeName);
+  const openModal = (employeeId: string, employeeName: string) => {
+    setEmployeeInfo({
+      employeeId,
+      employeeName,
+    });
   };
 
   const closeModal = () => {
-    setSelectedEmployeeId(null);
+    setEmployeeInfo(null);
   };
 
   return (
@@ -101,12 +124,15 @@ export default function EmployeeTable({
           }}
         />
       </TableContainer>
-      <AlertDialogue
-        openModal={selectedEmployeeId}
-        closeModal={closeModal}
-        employeeName={selectedEmployeeName}
-        employeeId={selectedEmployeeId}
-      />
+      {employeeInfo && (
+        <AlertDialogue
+          closeModal={closeModal}
+          employeeName={employeeInfo.employeeName}
+          employeeId={employeeInfo.employeeId}
+        />
+      )}
     </Box>
   );
-}
+};
+
+export default EmployeeTable;

@@ -1,4 +1,3 @@
-import React from "react";
 import CachedIcon from "@mui/icons-material/Cached";
 import Box from "@mui/material/Box";
 
