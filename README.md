@@ -18,6 +18,8 @@ Removed sections:
 
 <div align="center">
   <h1>Employee Management System</h1>
+  <br /> 
+  <a href="https://employees123.netlify.app/"><strong>Live Demo</strong></a>
 </div>
 
 <br />
