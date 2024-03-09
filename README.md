@@ -17,7 +17,6 @@ Removed sections:
 -->
 
 <div align="center">
-  <img src=https://github.com/Dnhem/neotech-employees/assets/64617718/9edfbf0f-e20c-4531-9462-e97d0d3536e9 />
   <h1>Employee Management System</h1>
 </div>
 
@@ -31,7 +30,7 @@ Removed sections:
 <img width="1080" alt="image" src="https://github.com/Dnhem/neotech-employees/assets/64617718/48d4dc4b-a41b-46bb-ae63-bda676bea5cf">
 </div>
 
-### What is Neotech Employees? 
+### What is Employees Management System? 
 An employee management system to track employee records. Create/Update/Delete employees keeping a record of current and former employees.
 
 <!-- TechStack -->
@@ -77,7 +76,7 @@ Clone the project
 
 Go to the directory
 ```bash
-  cd neotech-employees
+  cd employees
   npm install
   npm run dev
 ```
