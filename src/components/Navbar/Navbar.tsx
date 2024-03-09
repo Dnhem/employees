@@ -18,7 +18,7 @@ export default function ClippedDrawer() {
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            Neotech Employees
+            Employees
           </Typography>
         </Toolbar>
       </AppBar>
