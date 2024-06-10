@@ -18,7 +18,7 @@ export default function ClippedDrawer() {
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            Employees
+            Checkly Employees
           </Typography>
         </Toolbar>
       </AppBar>
