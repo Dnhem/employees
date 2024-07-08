@@ -19,4 +19,4 @@ jobs:
         run: npm install
       - name: Run checks # run the checks passing in the ENVIRONMENT_URL and recording a test session.
         id: run-checks
-        run: npx checkly test -e ENVIRONMENT_URL=${{ env.ENVIRONMENT_URL }} --reporter=github --record
+        run: npx checkly trigger --reporter=github --record
