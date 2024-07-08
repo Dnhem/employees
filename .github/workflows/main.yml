@@ -1,0 +1,22 @@
+name: Checkly Run on PR
+on:
+  pull_request:
+env:
+  CHECKLY_API_KEY: ${{ secrets.CHECKLY_API_KEY }}
+  CHECKLY_ACCOUNT_ID: ${{ secrets.CHECKLY_ACCOUNT_ID }}
+jobs:
+  test-e2e:
+    if: github.event_name == 'pull_request'
+    name: Run E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+      - name: Install dependencies
+        run: npm install
+      - name: Run checks # run the checks passing in the ENVIRONMENT_URL and recording a test session.
+        id: run-checks
+        run: npx checkly test -e ENVIRONMENT_URL=${{ env.ENVIRONMENT_URL }} --reporter=github --record
