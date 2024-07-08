@@ -12,32 +12,31 @@ jobs:
     name: Run E2E tests
     runs-on: ubuntu-latest
     steps:
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            ref: "${{ github.event.deployment_status.deployment.ref }}"
-            fetch-depth: 0
-        - name: Set branch name # workaround to detect branch name in "deployment_status" actions
-          run: echo "CHECKLY_TEST_REPO_BRANCH=$(git show -s --pretty=%D HEAD | tr -s ',' '\n' | sed 's/^ //' | grep -e 'origin/' | head -1 | sed 's/\origin\///g')" >> $GITHUB_ENV
-        - uses: actions/setup-node@v3
-          with:
-            node-version-file: ".nvmrc"
-        - name: Restore or cache node_modules
-          id: cache-node-modules
-          uses: actions/cache@v3
-          with:
-            path: node_modules
-            key: node-modules-${{ hashFiles('package-lock.json') }}
-        - name: Install dependencies
-          if: steps.cache-node-modules.outputs.cache-hit != 'true'
-          run: npm ci
-        - name: Run checks # run the checks passing in the ENVIRONMENT_URL and recording a test session.
-          id: run-checks
-          run: npx checkly test -e ENVIRONMENT_URL=${{ env.ENVIRONMENT_URL }} --reporter=github --record
-        # - name: Create summary # export the markdown report to the job summary.
-        #   id: create-summary
-        #   run: cat checkly-github-report.md > $GITHUB_STEP_SUMMARY
-        # - name: Deploy checks # if the test run was successful and we are on Production, deploy the checks
-        #   id: deploy-checks
-        #   if: steps.run-checks.outcome == 'success' && github.event.deployment_status.environment == 'Production'
-        #   run: npx checkly deploy --force
+      - uses: actions/checkout@v3
+        with:
+          ref: "${{ github.event.deployment_status.deployment.ref }}"
+          fetch-depth: 0
+      - name: Set branch name # workaround to detect branch name in "deployment_status" actions
+        run: echo "CHECKLY_TEST_REPO_BRANCH=$(git show -s --pretty=%D HEAD | tr -s ',' '\n' | sed 's/^ //' | grep -e 'origin/' | head -1 | sed 's/\origin\///g')" >> $GITHUB_ENV
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+      - name: Restore or cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Run checks # run the checks passing in the ENVIRONMENT_URL and recording a test session.
+        id: run-checks
+        run: npx checkly test -e ENVIRONMENT_URL=${{ env.ENVIRONMENT_URL }} --reporter=github --record
+      # - name: Create summary # export the markdown report to the job summary.
+      #   id: create-summary
+      #   run: cat checkly-github-report.md > $GITHUB_STEP_SUMMARY
+      # - name: Deploy checks # if the test run was successful and we are on Production, deploy the checks
+      #   id: deploy-checks
+      #   if: steps.run-checks.outcome == 'success' && github.event.deployment_status.environment == 'Production'
+      #   run: npx checkly deploy --force
